@@ -51,8 +51,6 @@ public class tryHeapsort{
             }
         }
 
-    //  (1) BUILD HEAP BOTTOM-UP - O(n)
-    //  Floyd's algorithm: start at last parent, sift everything down
     public void buildUp(String[] array) {
         for (int i = 0; i < array.length; i++) {
             heap[i] = array[i];
@@ -64,10 +62,7 @@ public class tryHeapsort{
         }
     }
 
-    // ================================================================
-    //  (2) BUILD HEAP TOP-DOWN - O(n log n)
-    //  Insert one word at a time, sift up after each insert
-    // ================================================================
+    
     public void insert(String value) {
         if (size >= heap.length) {
             throw new IllegalStateException("Heap is full");
@@ -77,10 +72,6 @@ public class tryHeapsort{
         size++;
     }
 
-    // ================================================================
-    //  (3) HEAP SORT - shared by both build methods
-    //  Works on a COPY so the original heap is not destroyed
-    // ================================================================
     public String[] sort() {
         // Copy heap so we don't destroy the original
         String[] tempHeap = new String[size];
@@ -98,10 +89,7 @@ public class tryHeapsort{
         return tempHeap;
     }
 
-    // ================================================================
-    //  READ + CLEAN WORDS from raw Ulysses text
-    //  Strips punctuation, lowercases, splits on whitespace
-    // ================================================================
+    
     private static String[] readWordsFromFile(String filename) {
         List<String> wordList = new ArrayList<>();
 
@@ -124,10 +112,7 @@ public class tryHeapsort{
         return wordList.toArray(new String[0]);
     }
 
-    // ================================================================
-    //  TIMING UTILITY
-    //  Pass true for bottom-up, false for top-down
-    // ================================================================
+    
     private static long timeSort(String[] words, boolean bottomUp) {
         tryHeapsort h = new tryHeapsort(words.length);
         long start = System.nanoTime();
@@ -140,12 +125,10 @@ public class tryHeapsort{
         return System.nanoTime() - start;
     }
 
-    // ================================================================
-    //  MAIN
-    // ================================================================
+
     public static void main(String[] args) {
 
-        // ── PART A: Small test (20 words) ────────────────────────────
+        // Part A
         System.out.println("=== SMALL TEST (20 words) ===");
 
         String[] small = {
@@ -195,7 +178,7 @@ public class tryHeapsort{
         timeSort(words.clone(), true);
         timeSort(words.clone(), false);
 
-        // ── Timed runs ────────────────────────────────────────────────
+        // Timed runs
         long startTime = System.nanoTime();
         tryHeapsort heapBU = new tryHeapsort(words.length);
         heapBU.buildUp(words.clone());
@@ -208,7 +191,7 @@ public class tryHeapsort{
         String[] sortedTopDown = heapTD.sort();
         long timeTopDown = System.nanoTime() - startTime;
 
-        // ── Timing results ────────────────────────────────────────────
+        //Timing results
         System.out.println("\n=== TIMING RESULTS ===");
         System.out.printf("Bottom-up build + sort: %.3f ms%n", timeBottomUp / 1_000_000.0);
         System.out.printf("Top-down  build + sort: %.3f ms%n", timeTopDown  / 1_000_000.0);
@@ -221,13 +204,13 @@ public class tryHeapsort{
                 (double) timeBottomUp / timeTopDown);
         }
 
-        // ── First 20 sorted words ─────────────────────────────────────
+        //First 20 sorted words
         System.out.println("\n=== FIRST 20 SORTED WORDS (bottom-up) ===");
         for (int i = 0; i < Math.min(20, sortedBottomUp.length); i++) {
             System.out.println("  " + (i + 1) + ": " + sortedBottomUp[i]);
         }
 
-        // ── Verify both methods match ─────────────────────────────────
+        //Verify both methods match
         boolean match = true;
         for (int i = 0; i < sortedBottomUp.length; i++) {
             if (!sortedBottomUp[i].equals(sortedTopDown[i])) {
